@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tomás Schlossberg — Architecture & Design</title>
+<meta name="description" content="Tomás Schlossberg, architect — residential and hospitality projects around the world.">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<nav class="nav nav-minimal" id="nav">
+  <a href="index.html" class="nav-logo sr-only">Tomás Schlossberg</a>
+  <button class="nav-toggle" id="navToggle" aria-label="Open menu">
+    <span class="nav-toggle-bars"><span></span><span></span><span></span></span>
+  </button>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="proyectos.html">Projects</a></li>
+    <li><a href="estudio.html">Studio</a></li>
+    <li><a href="contacto.html">Contact</a></li>
+  </ul>
+</nav>
+
+<header class="hero hero-landing">
+  <!--
+    SLIDESHOW — swap these placeholders for your real photos/videos.
+    Each .hero-slide is one slide. For an image:
+      <div class="hero-slide"><img src="assets/hero/photo-1.jpg" alt=""></div>
+    For a video:
+      <div class="hero-slide"><video src="assets/hero/clip-1.mp4" autoplay muted loop playsinline></video></div>
+    js/script.js cycles them automatically — you don't need to touch the JS,
+    just add or remove .hero-slide blocks.
+  -->
+  <div class="hero-slides" id="heroSlides">
+    <div class="hero-slide is-active"><img src="assets/hero/slide-01-passage.jpg" alt=""></div>
+    <div class="hero-slide"><img src="assets/hero/slide-02-facade.jpg" alt=""></div>
+    <div class="hero-slide"><img src="assets/hero/slide-03-detail.jpg" alt=""></div>
+    <div class="hero-slide"><img src="assets/hero/slide-04-interior.jpg" alt=""></div>
+  </div>
+  <div class="hero-scrim"></div>
+  <div class="hero-content hero-content-center">
+    <div class="logo-lockup">
+      <span class="logo-mark">Tomás Schlossberg</span>
+      <span class="logo-tagline">Architecture &amp; Design</span>
+    </div>
+  </div>
+</header>
+
+<script src="js/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,986 @@
+/* ==========================================================================
+   SCHLOSSBERG — Arquitectura & Interiorismo
+   Brand book v1.0 (mayo 2024): logotipo en Söhne Bold, tracking +10,
+   paleta exclusiva de negro (#000000) y blanco (#FFFFFF).
+   Söhne es de pago — usamos Switzer (Fontshare) como alternativa libre
+   de la misma familia de grotescas suizas. Cambiar es trivial: ver nota
+   junto al @import si más adelante compran licencia de Söhne.
+   ========================================================================== */
+
+@import url('https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700&display=swap');
+
+:root{
+  --bg:        #FFFFFF;
+  --bg-alt:    rgba(0,0,0,0.045);
+  --ink:       #000000;
+  --ink-soft:  rgba(0,0,0,0.6);
+  --line:      rgba(0,0,0,0.14);
+  --line-soft: rgba(0,0,0,0.08);
+
+  /* Brand type: single family, two weights (mirrors Söhne Bold / Söhne Regular) */
+  --brand:  'Switzer', -apple-system, sans-serif;
+  --sans:   'Switzer', -apple-system, sans-serif;
+
+  --tracked: 0.14em;
+  --logo-tracked: 0.01em; /* brand book: tracking +10 on the wordmark */
+  --container: 1400px;
+
+  --ease: cubic-bezier(.22,.61,.36,1);
+}
+
+*{ box-sizing:border-box; margin:0; padding:0; }
+html{ scroll-behavior:smooth; }
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:var(--sans);
+  font-size:16px;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+img{ max-width:100%; display:block; }
+a{ color:inherit; text-decoration:none; }
+ul{ list-style:none; }
+button{ font-family:inherit; background:none; border:none; cursor:pointer; color:inherit; }
+
+.wrap{
+  max-width:var(--container);
+  margin:0 auto;
+  padding:0 40px;
+}
+@media (max-width:480px){
+  .wrap{ padding:0 20px; }
+}
+
+.eyebrow{
+  font-family:var(--sans);
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:var(--tracked);
+  text-transform:uppercase;
+  color:var(--ink-soft);
+}
+
+/* Focus visibility */
+a:focus-visible, button:focus-visible{
+  outline:1.5px solid var(--ink);
+  outline-offset:3px;
+}
+@media (prefers-reduced-motion: reduce){
+  *{ animation-duration:0.001ms !important; transition-duration:0.001ms !important; scroll-behavior:auto !important; }
+}
+
+/* ==========================================================================
+   NAV
+   ========================================================================== */
+.nav{
+  position:fixed;
+  top:0; left:0; right:0;
+  z-index:100;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:28px 40px;
+  transition:background .4s var(--ease), padding .4s var(--ease), border-color .4s var(--ease);
+  border-bottom:1px solid transparent;
+}
+.nav.is-scrolled{
+  background:rgba(255,255,255,0.97);
+  padding:18px 40px;
+  border-bottom-color:var(--line);
+}
+.nav-logo{
+  font-family:var(--brand);
+  font-weight:700;
+  font-size:23px;
+  letter-spacing:var(--logo-tracked);
+  display:inline-block;
+}
+.nav-logo img{ display:block; height:22px; width:auto; }
+.nav-links{
+  display:flex;
+  gap:36px;
+}
+.nav-links a{
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:var(--tracked);
+  text-transform:uppercase;
+  position:relative;
+  padding-bottom:4px;
+}
+.nav-links a::after{
+  content:'';
+  position:absolute;
+  left:0; bottom:0;
+  width:0; height:1px;
+  background:var(--ink);
+  transition:width .3s var(--ease);
+}
+.nav-links a:hover::after,
+.nav-links a.is-active::after{ width:100%; }
+.nav-toggle{
+  display:none;
+  width:52px; height:52px;
+  align-items:center;
+  justify-content:center;
+  position:relative;
+  z-index:101;
+}
+.nav-toggle-bars{ position:relative; display:inline-block; width:24px; height:16px; }
+.nav-toggle-bars span{
+  position:absolute; left:0; right:0; height:2px; background:var(--ink);
+  transition:transform .3s var(--ease), opacity .3s var(--ease), background .25s var(--ease);
+}
+.nav-toggle-bars span:nth-child(1){ top:0; }
+.nav-toggle-bars span:nth-child(2){ top:50%; margin-top:-1px; }
+.nav-toggle-bars span:nth-child(3){ bottom:0; }
+.nav-toggle.is-open .nav-toggle-bars span:nth-child(1){ transform:translateY(7px) rotate(45deg); }
+.nav-toggle.is-open .nav-toggle-bars span:nth-child(2){ opacity:0; }
+.nav-toggle.is-open .nav-toggle-bars span:nth-child(3){ transform:translateY(-7px) rotate(-45deg); }
+
+/* Minimal nav (home / landing page): only a menu button, top-right,
+   that opens a fullscreen overlay with the site links. No inline nav
+   links, no wordmark in the bar — the logo lives in the hero itself.
+   The button sits over a photo/video, so its lines get a soft drop
+   shadow for contrast — no solid chip behind it. */
+.nav-minimal{ justify-content:flex-end; }
+.nav-minimal .nav-logo{ display:none; }
+.nav-minimal .nav-toggle{ display:flex; }
+.nav-minimal .nav-toggle-bars span{
+  background:#FFFFFF;
+  filter:drop-shadow(0 1px 2px rgba(0,0,0,0.55));
+}
+.nav-minimal.is-scrolled .nav-toggle-bars span{
+  background:var(--ink);
+  filter:none;
+}
+.nav-minimal .nav-toggle.is-open .nav-toggle-bars span{
+  background:var(--ink);
+  filter:none;
+}
+
+/* Split nav (projects index / city pages / project pages): logo
+   top-left, menu button top-right — used on white backgrounds. */
+.nav-split{ justify-content:space-between; }
+.nav-split .nav-logo{ order:1; font-size:clamp(20px, 2.4vw, 27px); }
+.nav-split .nav-logo img{ height:clamp(22px, 2.6vw, 30px); }
+.nav-split .nav-toggle{ order:2; display:flex; }
+
+.nav-minimal .nav-links,
+.nav-split .nav-links{
+  position:fixed;
+  inset:0;
+  background:var(--bg);
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  gap:clamp(28px, 5vw, 48px);
+  transform:translateY(-100%);
+  transition:transform .5s var(--ease);
+}
+.nav-minimal .nav-links.is-open,
+.nav-split .nav-links.is-open{ transform:translateY(0); }
+.nav-minimal .nav-links a,
+.nav-split .nav-links a{
+  font-family:var(--brand);
+  font-weight:700;
+  font-size:clamp(28px, 5.6vw, 58px);
+  line-height:1;
+  letter-spacing:0.01em;
+  color:var(--ink);
+  transition:opacity .3s var(--ease);
+}
+.nav-minimal .nav-links a:hover,
+.nav-split .nav-links a:hover,
+.nav-minimal .nav-links a.is-active,
+.nav-split .nav-links a.is-active{ opacity:0.5; }
+
+@media (max-width:720px){
+  .nav{ padding:22px 24px; }
+  .nav.is-scrolled{ padding:16px 24px; }
+  .nav-links{
+    position:fixed;
+    inset:0;
+    background:var(--bg);
+    flex-direction:column;
+    justify-content:center;
+    align-items:flex-start;
+    padding:0 32px;
+    gap:28px;
+    transform:translateY(-100%);
+    transition:transform .45s var(--ease);
+  }
+  .nav-links.is-open{ transform:translateY(0); }
+  .nav-links a{ font-size:22px; font-family:var(--brand); letter-spacing:0; text-transform:none; font-weight:600; }
+  .nav-toggle{ display:flex; }
+  /* Match the classic-nav mobile menu's letter case (mixed case, not
+     uppercase) so it's consistent across pages on phones — desktop is
+     untouched. */
+  .nav-minimal .nav-links a,
+  .nav-split .nav-links a{ text-transform:none; }
+}
+
+/* ==========================================================================
+   PLACEHOLDER IMAGE TILES
+   Swap these for real <img> tags when photography is ready — see README.
+   ========================================================================== */
+.ph{
+  position:relative;
+  width:100%; height:100%;
+  background:
+    linear-gradient(135deg, var(--bg-alt) 0%, rgba(0,0,0,0.09) 100%);
+  overflow:hidden;
+}
+.ph::before{
+  content:'';
+  position:absolute; inset:0;
+  background-image:
+    repeating-linear-gradient(0deg, rgba(0,0,0,0.05) 0 1px, transparent 1px 64px),
+    repeating-linear-gradient(90deg, rgba(0,0,0,0.05) 0 1px, transparent 1px 64px);
+}
+.ph-label{
+  position:absolute;
+  bottom:16px; left:16px;
+  font-size:10px;
+  font-weight:600;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  color:var(--ink-soft);
+  opacity:0.55;
+}
+
+/* ==========================================================================
+   HERO
+   ========================================================================== */
+.hero{
+  position:relative;
+  height:100svh;
+  min-height:560px;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+}
+.hero-image{ position:absolute; inset:0; }
+.hero-scrim{
+  position:absolute; inset:0;
+  background:linear-gradient(180deg, rgba(0,0,0,0) 40%, rgba(0,0,0,0.6) 100%);
+}
+.hero-content{
+  position:relative;
+  padding:0 40px 56px;
+  color:#FFFFFF;
+}
+.hero-content-center{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:0 24px;
+  text-align:center;
+}
+.hero-title{
+  font-family:var(--brand);
+  font-weight:700;
+  font-size:clamp(48px, 9vw, 128px);
+  line-height:0.95;
+  letter-spacing:var(--logo-tracked);
+  opacity:0;
+  transform:translateY(24px);
+  animation:rise .9s var(--ease) .15s forwards;
+}
+.hero-sub{
+  margin-top:18px;
+  font-size:12px;
+  font-weight:600;
+  letter-spacing:var(--tracked);
+  text-transform:uppercase;
+  opacity:0;
+  transform:translateY(16px);
+  animation:rise .9s var(--ease) .45s forwards;
+}
+/* When the hero carries no big wordmark, the tagline stands alone —
+   give it a bit more presence. */
+.hero-sub-solo{
+  margin-top:0;
+  font-size:clamp(14px, 1.6vw, 17px);
+}
+.sr-only{
+  position:absolute;
+  width:1px; height:1px;
+  padding:0; margin:-1px;
+  overflow:hidden;
+  clip:rect(0,0,0,0);
+  white-space:nowrap;
+  border:0;
+}
+@keyframes rise{ to{ opacity:1; transform:translateY(0); } }
+
+.logo-lockup{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:16px;
+  opacity:0;
+  animation:fade-in 1s var(--ease) .2s forwards;
+}
+.logo-mark-img{
+  display:block;
+  height:clamp(40px, 7vw, 76px);
+  width:auto;
+  /* Forces the (black) logo artwork to render in white, since it
+     sits over a photo/video with a dark scrim. */
+  filter:brightness(0) invert(1);
+}
+.logo-mark{
+  display:block;
+  font-family:var(--brand);
+  font-weight:700;
+  font-size:clamp(32px, 6vw, 60px);
+  letter-spacing:0.01em;
+  color:#FFFFFF;
+}
+.logo-tagline{
+  font-family:var(--brand);
+  font-weight:500;
+  font-size:clamp(11px, 1.4vw, 13px);
+  letter-spacing:var(--tracked);
+  text-transform:uppercase;
+}
+@keyframes fade-in{ to{ opacity:1; } }
+
+/* Hero slideshow — placeholder slides until real photography/video
+   is dropped in. See the comment in index.html for how to swap them. */
+.hero-slides{ position:absolute; inset:0; }
+.hero-slide{
+  position:absolute; inset:0;
+  opacity:0;
+  transition:opacity 1.4s ease;
+}
+.hero-slide.is-active{ opacity:1; }
+.hero-slide img, .hero-slide video{
+  width:100%; height:100%; object-fit:cover;
+}
+
+/* Coordinates ticker — the signature element:
+   three studio locations, read like site-plan coordinates. */
+.coords{
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+  background:var(--bg);
+}
+.coords-track{
+  display:flex;
+  align-items:center;
+  gap:64px;
+  padding:14px 40px;
+  overflow-x:auto;
+  scrollbar-width:none;
+}
+.coords-track::-webkit-scrollbar{ display:none; }
+.coords-item{
+  display:flex;
+  align-items:baseline;
+  gap:10px;
+  white-space:nowrap;
+  font-size:11px;
+  letter-spacing:0.08em;
+  color:var(--ink-soft);
+}
+.coords-item b{
+  font-family:var(--brand);
+  font-weight:700;
+  font-size:14px;
+  color:var(--ink);
+  letter-spacing:0;
+}
+.coords-item span{ font-variant-numeric:tabular-nums; }
+
+/* ==========================================================================
+   SECTION HEADERS
+   ========================================================================== */
+.section{ padding:120px 0; }
+.section-tight{ padding:80px 0; }
+.section-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  gap:24px;
+  margin-bottom:64px;
+  padding-bottom:28px;
+  border-bottom:1px solid var(--line);
+}
+.section-head h2{
+  font-family:var(--brand);
+  font-weight:700;
+  font-size:clamp(28px,4vw,44px);
+  letter-spacing:var(--logo-tracked);
+}
+.section-head p{
+  max-width:340px;
+  color:var(--ink-soft);
+  font-size:14px;
+  line-height:1.6;
+}
+
+/* ==========================================================================
+   PROJECT GRID (asymmetric, in the spirit of the references)
+   ========================================================================== */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(6, 1fr);
+  gap:4px 24px;
+}
+.tile{ grid-column:span 6; }
+.tile-a{ grid-column:span 4; }
+.tile-b{ grid-column:span 2; }
+.tile-c{ grid-column:span 3; }
+
+.tile-frame{
+  position:relative;
+  aspect-ratio:4/5;
+  overflow:hidden;
+}
+.tile-a .tile-frame{ aspect-ratio:16/11; }
+.tile-c .tile-frame{ aspect-ratio:3/4; }
+.tile-frame .ph{ transition:transform .7s var(--ease); }
+.tile:hover .tile-frame .ph{ transform:scale(1.035); }
+.tile-frame img{ width:100%; height:100%; object-fit:cover; transition:transform .7s var(--ease); }
+.tile:hover .tile-frame img{ transform:scale(1.035); }
+
+.tile-cap{
+  display:flex;
+  justify-content:space-between;
+  align-items:baseline;
+  padding:16px 0 40px;
+  border-bottom:1px solid var(--line-soft);
+}
+.tile-cap h3{
+  font-family:var(--brand);
+  font-weight:600;
+  font-size:18px;
+}
+.tile-cap .meta{
+  font-size:11px;
+  letter-spacing:0.06em;
+  color:var(--ink-soft);
+  text-align:right;
+  white-space:nowrap;
+  padding-left:16px;
+}
+
+@media (max-width:860px){
+  .tile-a,.tile-b,.tile-c{ grid-column:span 6; }
+}
+
+/* ==========================================================================
+   INTRO / SPLIT BLOCKS (about, philosophy)
+   ========================================================================== */
+.split{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:80px;
+  align-items:center;
+}
+.split-reverse{ direction:rtl; }
+.split-reverse > *{ direction:ltr; }
+.split-media .tile-frame{ aspect-ratio:4/5; }
+.split-text .eyebrow{ margin-bottom:20px; }
+.split-text h2{
+  font-family:var(--brand);
+  font-weight:700;
+  font-size:clamp(26px,3.4vw,40px);
+  line-height:1.15;
+  letter-spacing:var(--logo-tracked);
+  margin-bottom:24px;
+}
+.split-text p{
+  color:var(--ink-soft);
+  font-size:15px;
+  line-height:1.75;
+  max-width:46ch;
+}
+.split-text p + p{ margin-top:16px; }
+
+@media (max-width:860px){
+  .split{ grid-template-columns:1fr; gap:36px; }
+}
+
+/* ==========================================================================
+   STATS / LOCATIONS STRIP
+   ========================================================================== */
+.locations{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  border-top:1px solid var(--line);
+  border-left:1px solid var(--line);
+}
+.locations > div{
+  border-right:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+  padding:44px 36px;
+}
+.locations h3{
+  font-family:var(--brand);
+  font-weight:700;
+  font-size:24px;
+  margin-bottom:10px;
+}
+.locations p{
+  color:var(--ink-soft);
+  font-size:13px;
+  line-height:1.6;
+}
+@media (max-width:720px){
+  .locations{ grid-template-columns:1fr; }
+}
+
+/* ==========================================================================
+   CTA / FOOTER
+   ========================================================================== */
+.cta{
+  padding:120px 0;
+  text-align:center;
+  border-top:1px solid var(--line);
+}
+.cta h2{
+  font-family:var(--brand);
+  font-weight:700;
+  font-size:clamp(30px,6vw,60px);
+  letter-spacing:var(--logo-tracked);
+  margin-bottom:32px;
+}
+.btn{
+  display:inline-flex;
+  align-items:center;
+  gap:12px;
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:var(--tracked);
+  text-transform:uppercase;
+  padding:18px 32px;
+  border:1px solid var(--ink);
+  transition:background .3s var(--ease), color .3s var(--ease);
+}
+.btn:hover{ background:var(--ink); color:var(--bg); }
+
+footer{
+  border-top:1px solid var(--line);
+  padding:48px 0 36px;
+}
+.footer-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  flex-wrap:wrap;
+  gap:32px;
+  padding-bottom:36px;
+}
+.footer-logo{
+  font-family:var(--brand);
+  font-weight:700;
+  font-size:20px;
+  letter-spacing:var(--logo-tracked);
+  display:inline-block;
+}
+.footer-logo img{ display:block; height:20px; width:auto; }
+.footer-cols{
+  display:flex;
+  gap:64px;
+  flex-wrap:wrap;
+}
+.footer-col h4{
+  font-size:10px;
+  font-weight:600;
+  letter-spacing:var(--tracked);
+  text-transform:uppercase;
+  color:var(--ink-soft);
+  margin-bottom:14px;
+}
+.footer-col a, .footer-col p{
+  display:block;
+  font-size:14px;
+  margin-bottom:8px;
+}
+.footer-col a:hover{ text-decoration:underline; text-underline-offset:3px; }
+.footer-bottom{
+  display:flex;
+  justify-content:space-between;
+  padding-top:24px;
+  border-top:1px solid var(--line-soft);
+  font-size:11px;
+  color:var(--ink-soft);
+  letter-spacing:0.04em;
+  flex-wrap:wrap;
+  gap:8px;
+}
+
+/* ==========================================================================
+   PAGE HEADER (interior pages)
+   ========================================================================== */
+.page-head{
+  padding:180px 40px 64px;
+  border-bottom:1px solid var(--line);
+}
+@media (max-width:480px){
+  .page-head{ padding:150px 20px 48px; }
+}
+.page-head .eyebrow{ margin-bottom:20px; }
+.page-head h1{
+  font-family:var(--brand);
+  font-weight:700;
+  font-size:clamp(38px,7vw,80px);
+  line-height:1;
+  letter-spacing:var(--logo-tracked);
+}
+.page-head p{
+  margin-top:22px;
+  max-width:52ch;
+  color:var(--ink-soft);
+  font-size:15px;
+  line-height:1.7;
+}
+
+/* Filter row (projects page) — anchor links that jump to each city section */
+.filters{
+  display:flex;
+  gap:28px;
+  flex-wrap:wrap;
+  margin-top:36px;
+}
+.filters a{
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:var(--tracked);
+  text-transform:uppercase;
+  color:var(--ink-soft);
+  padding-bottom:6px;
+  border-bottom:1px solid transparent;
+  transition:color .25s var(--ease), border-color .25s var(--ease);
+}
+.filters a:hover{ color:var(--ink); border-color:var(--ink); }
+
+.city-heading{
+  font-family:var(--brand);
+  font-weight:700;
+  font-size:clamp(26px,3.4vw,36px);
+  letter-spacing:var(--logo-tracked);
+  padding-bottom:24px;
+  margin-bottom:48px;
+  border-bottom:1px solid var(--line);
+  scroll-margin-top:100px;
+}
+
+/* Contact page */
+.contact-grid{
+  display:grid;
+  grid-template-columns:1.1fr 0.9fr;
+  gap:80px;
+}
+@media (max-width:860px){ .contact-grid{ grid-template-columns:1fr; gap:56px; } }
+
+form{ display:flex; flex-direction:column; gap:22px; }
+.field{ display:flex; flex-direction:column; gap:8px; }
+.field label{
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:var(--tracked);
+  text-transform:uppercase;
+  color:var(--ink-soft);
+}
+.field input, .field textarea, .field select{
+  font-family:var(--sans);
+  font-size:15px;
+  padding:12px 2px;
+  background:transparent;
+  border:none;
+  border-bottom:1px solid var(--line);
+  color:var(--ink);
+  transition:border-color .25s var(--ease);
+}
+.field textarea{ resize:vertical; min-height:110px; }
+.field input:focus, .field textarea:focus, .field select:focus{
+  outline:none;
+  border-color:var(--ink);
+}
+.field input::placeholder, .field textarea::placeholder{ color:rgba(0,0,0,0.35); }
+.submit-row{ margin-top:8px; }
+.form-note{
+  margin-top:18px;
+  font-size:12px;
+  color:var(--ink-soft);
+}
+
+.info-block + .info-block{ margin-top:40px; }
+.info-block h4{
+  font-size:10px;
+  font-weight:600;
+  letter-spacing:var(--tracked);
+  text-transform:uppercase;
+  color:var(--ink-soft);
+  margin-bottom:12px;
+}
+.info-block p, .info-block a{ font-size:15px; line-height:1.7; }
+.info-block a:hover{ text-decoration:underline; text-underline-offset:3px; }
+
+/* ==========================================================================
+   CONTACT — simplified (just mail/insta + a large image)
+   ========================================================================== */
+.contact-simple{
+  display:grid;
+  grid-template-columns:0.8fr 1.2fr;
+  gap:64px;
+  align-items:center;
+  padding-top:160px;
+}
+.contact-links{
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+}
+.contact-links a{
+  font-family:var(--brand);
+  font-weight:700;
+  font-size:clamp(18px, 2.2vw, 26px);
+  color:var(--ink);
+  transition:opacity .25s var(--ease);
+  word-break:break-word;
+}
+.contact-links a:hover{ opacity:0.5; }
+.contact-simple .tile-frame{ aspect-ratio:4/5; }
+@media (max-width:860px){
+  .contact-simple{ grid-template-columns:1fr; gap:40px; padding-top:120px; }
+}
+
+/* ==========================================================================
+   STUDIO — Laplace-style image-led sections
+   ========================================================================== */
+.studio-intro{ padding-top:160px; }
+.studio-intro .tile-frame{ margin-bottom:40px; }
+.tile-frame-natural{ aspect-ratio:auto; }
+.tile-frame-natural img{ width:100%; height:auto; object-fit:initial; }
+.studio-intro p{
+  max-width:60ch;
+  font-size:16px;
+  line-height:1.75;
+  color:var(--ink-soft);
+}
+.studio-section-head{
+  font-family:var(--brand);
+  font-weight:700;
+  font-size:clamp(22px,3vw,30px);
+  margin-bottom:40px;
+}
+
+/* ==========================================================================
+   PROJECTS — city index (Projects tab landing)
+   ========================================================================== */
+.city-index{
+  min-height:100svh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:clamp(36px, 6vw, 64px);
+  padding:140px 24px 60px;
+}
+.city-link{
+  font-family:var(--brand);
+  font-weight:700;
+  letter-spacing:0.01em;
+  font-size:clamp(28px, 5.6vw, 58px);
+  line-height:1;
+  color:var(--ink);
+  transition:opacity .3s var(--ease);
+}
+.city-link:hover{ opacity:0.5; }
+
+/* ==========================================================================
+   PROJECTS — per-city list (stacked covers, first project on top)
+   ========================================================================== */
+.project-row{
+  display:block;
+  padding:56px 0;
+  border-bottom:1px solid var(--line);
+}
+.project-row:first-child{ padding-top:0; }
+.project-row .tile-frame{ aspect-ratio:16/9; }
+.project-row .tile-cap{ border-bottom:none; padding-top:20px; }
+.project-row .tile-cap h3{ font-size:22px; }
+
+/* City pages start straight at the first project's cover — no heading —
+   so this just clears the fixed nav bar at the top. */
+.city-projects{ padding-top:120px; }
+
+/* One-off cover treatment: title overlaid in white directly on the
+   image, used only for the Paris 5 listing (per the client's request —
+   not the default style for project covers). */
+.project-row-overlay .tile-frame{
+  position:relative;
+  aspect-ratio:16/9;
+}
+.project-row-overlay .tile-frame img{
+  width:100%; height:100%; object-fit:cover; display:block;
+}
+.project-row-overlay .row-overlay-scrim{
+  position:absolute; inset:0;
+  background:linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.45) 100%);
+}
+.project-row-overlay .row-overlay-text{
+  position:absolute;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  color:#FFFFFF;
+  gap:8px;
+  padding:24px;
+}
+.project-row-overlay .overlay-title{
+  font-family:var(--brand);
+  font-weight:700;
+  font-size:clamp(40px, 6.4vw, 84px);
+}
+.project-row-overlay .overlay-subtitle{
+  font-family:var(--brand);
+  font-weight:700;
+  font-size:clamp(40px, 6.4vw, 84px);
+}
+@media (max-width:480px){
+  .project-row-overlay .row-overlay-text{ padding:16px; gap:4px; }
+  .project-row-overlay .overlay-title,
+  .project-row-overlay .overlay-subtitle{ font-size:7.2vw; line-height:1.15; }
+}
+
+/* Small badge for covers without real photos yet (pending / under
+   construction) — sits in a corner, doesn't compete with the title. */
+.row-overlay-badge{
+  position:absolute;
+  bottom:20px;
+  right:24px;
+  font-family:var(--brand);
+  font-weight:600;
+  font-size:12px;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  color:#FFFFFF;
+  background:rgba(0,0,0,0.4);
+  padding:8px 14px;
+  border-radius:2px;
+}
+/* Pending covers have no photo — a neutral placeholder background
+   instead of an <img>. */
+.project-row-overlay .tile-frame.is-pending{
+  background:
+    linear-gradient(135deg, var(--bg-alt) 0%, rgba(0,0,0,0.09) 100%);
+}
+
+/* ==========================================================================
+   PROJECTS — single project gallery
+   ========================================================================== */
+.project-head{
+  padding:160px 40px 48px;
+  text-align:center;
+}
+@media (max-width:480px){
+  .project-head{ padding:140px 20px 40px; }
+}
+.project-head h1{
+  font-family:var(--brand);
+  font-weight:700;
+  font-size:clamp(32px,6vw,56px);
+  letter-spacing:var(--logo-tracked);
+  color:var(--ink);
+}
+.project-head .meta{
+  margin-top:14px;
+  font-family:var(--brand);
+  font-weight:700;
+  font-size:clamp(32px,6vw,56px);
+  color:var(--ink);
+}
+.project-cover{
+  width:100%;
+  aspect-ratio:16/9;
+}
+.project-cover img{ width:100%; height:100%; object-fit:cover; display:block; }
+.project-gallery{
+  display:grid;
+  grid-template-columns:repeat(2, 1fr);
+  gap:24px;
+  padding:64px 40px 120px;
+  max-width:var(--container);
+  margin:0 auto;
+}
+.project-gallery .ph, .project-gallery img{ aspect-ratio:4/3; width:100%; height:100%; object-fit:cover; display:block; }
+
+/* Optional vertical video, shown above the gallery grid at its own
+   natural aspect ratio — no cropping, no black letterbox bars. */
+.project-video{
+  display:flex;
+  justify-content:center;
+  padding:0 40px 24px;
+  max-width:var(--container);
+  margin:0 auto;
+}
+.project-video video{
+  width:auto;
+  height:auto;
+  max-width:100%;
+  max-height:85vh;
+  display:block;
+}
+@media (max-width:720px){
+  .project-video{ padding:0 16px 24px; }
+}
+.project-gallery > div:nth-child(3n+1){ grid-column:span 2; }
+.project-gallery > div:nth-child(3n+1) .ph,
+.project-gallery > div:nth-child(3n+1) img{ aspect-ratio:16/9; }
+/* If the last image would otherwise be alone in its row (no pair),
+   give it the full width instead of leaving it small and isolated. */
+.project-gallery > div:last-child:nth-child(3n+2){ grid-column:span 2; }
+.project-gallery > div:last-child:nth-child(3n+2) .ph,
+.project-gallery > div:last-child:nth-child(3n+2) img{ aspect-ratio:16/9; }
+@media (max-width:720px){
+  .project-gallery{ grid-template-columns:1fr; padding-left:20px; padding-right:20px; }
+  .project-gallery > div:nth-child(3n+1){ grid-column:span 1; }
+}
+
+/* ==========================================================================
+   PROJECTS — "stacked" gallery layout (one-off, per project — see
+   js/projects-data.js "galleryLayout: 'stacked'"). Images run full width,
+   one below the other, at their natural size — no cropping, no forced
+   aspect-ratio. An optional pair (set via "pairAt") sits side by side,
+   smaller, as the one exception.
+   ========================================================================== */
+.project-gallery-stacked{
+  display:flex;
+  flex-direction:column;
+  gap:32px;
+  padding:64px 40px 120px;
+  max-width:var(--container);
+  margin:0 auto;
+}
+.project-gallery-stacked .gallery-full img{
+  width:100%;
+  height:auto;
+  display:block;
+}
+.project-gallery-stacked .gallery-pair{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:24px;
+}
+.project-gallery-stacked .gallery-pair img{
+  width:100%;
+  height:auto;
+  display:block;
+}
+@media (max-width:720px){
+  .project-gallery-stacked{ padding-left:20px; padding-right:20px; gap:24px; }
+  .project-gallery-stacked .gallery-pair{ grid-template-columns:1fr; gap:16px; }
+}
